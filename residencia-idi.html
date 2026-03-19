@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Residencia I+D+i · CRTIC</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap');
+
+    /* ── TOKENS ── */
+    :root {
+      --orange:        #E8451E;
+      --orange-dim:    rgba(232,69,30,.11);
+      --orange-border: rgba(232,69,30,.22);
+      --bg:            #090909;
+      --bg2:           #101010;
+      --bg3:           #161616;
+      --surface:       rgba(255,255,255,.032);
+      --border:        rgba(255,255,255,.075);
+      --text:          #F0EDE8;
+      --muted:         rgba(240,237,232,.42);
+    }
+
+    /* ── RESET ── */
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── LAYOUT ── */
+    .inner { max-width:1120px; margin:0 auto; padding:0 64px; }
+    @media(max-width:768px){ .inner{ padding:0 24px; } }
+    a { color:inherit; text-decoration:none; }
+
+    /* ── TYPE ── */
+    .label {
+      font-size:11px; font-weight:700; letter-spacing:.14em;
+      text-transform:uppercase; color:var(--orange);
+      display:flex; align-items:center; gap:10px; margin-bottom:16px;
+    }
+    .label::before { content:''; width:18px; height:1px; background:var(--orange); }
+
+    h2.title {
+      font-family:'DM Serif Display',serif;
+      font-size:clamp(30px,3.8vw,50px);
+      font-weight:400; line-height:1.1;
+      letter-spacing:-.025em; margin-bottom:18px;
+    }
+    h2.title em { font-style:italic; color:var(--orange); }
+
+    p.lead { font-size:15px; color:var(--muted); line-height:1.8; max-width:440px; }
+
+    .rule { height:1px; background:var(--border); }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display:inline-flex; align-items:center; gap:8px;
+      font-family:'Inter',sans-serif; font-size:13px; font-weight:600;
+      padding:9px 18px; border-radius:6px; cursor:pointer; border:none;
+      letter-spacing:.03em; transition:all .2s; text-decoration:none;
+    }
+    .btn-primary { background:var(--orange); color:#fff; }
+    .btn-primary:hover { filter:brightness(1.1); transform:translateY(-1px); }
+    .btn-ghost {
+      background:var(--surface); border:1px solid var(--border); color:var(--text);
+    }
+    .btn-ghost:hover { border-color:var(--orange); color:var(--orange); }
+    .btn svg { width:14px; height:14px; flex-shrink:0; }
+
+    /* ── NAV ── */
+    nav {
+      position:fixed; inset:0 0 auto 0; z-index:200; height:58px;
+      display:flex; align-items:center;
+      background:rgba(9,9,9,.92); backdrop-filter:blur(14px);
+      border-bottom:1px solid var(--border);
+    }
+    .nav-inner {
+      width:100%; max-width:1120px; margin:0 auto; padding:0 64px;
+      display:flex; align-items:center; justify-content:space-between; gap:24px;
+    }
+    @media(max-width:768px){ .nav-inner{ padding:0 24px; } }
+    .nav-logo { display:flex; align-items:center; gap:10px; }
+    .nav-logo img { height:30px; width:30px; object-fit:contain; }
+    .nav-logo-text {
+      font-size:11px; font-weight:600; letter-spacing:.1em;
+      text-transform:uppercase; color:var(--muted);
+    }
+    .nav-right { display:flex; align-items:center; gap:16px; }
+    .nav-links { display:flex; gap:24px; list-style:none; }
+    .nav-links a {
+      font-size:13px; font-weight:500; color:var(--muted);
+      letter-spacing:.03em; transition:color .2s;
+    }
+    .nav-links a:hover { color:var(--orange); }
+    @media(max-width:860px){ .nav-links{ display:none; } }
+
+    /* ── HERO (left) ── */
+    .hero {
+      position:relative; height:100svh; min-height:640px;
+      display:flex; align-items:flex-end; overflow:hidden;
+    }
+    .hero-img { position:absolute; inset:0; background:url('fotos/DSC00266.JPG') center 40%/cover no-repeat; }
+    .hero-img::after {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(to top, rgba(9,9,9,1) 0%, rgba(9,9,9,.5) 55%, rgba(9,9,9,.1) 100%);
+    }
+    .hero-content {
+      position:relative; z-index:1;
+      padding:0 64px 80px; max-width:740px;
+      text-align:left;
+    }
+    @media(max-width:768px){ .hero-content{ padding:0 24px 56px; } }
+
+    .hero-badge {
+      display:inline-flex; align-items:center; gap:8px;
+      font-size:11px; font-weight:700; letter-spacing:.12em;
+      text-transform:uppercase; color:var(--orange); margin-bottom:22px;
+    }
+    .hero-badge-dot { width:5px; height:5px; background:var(--orange); border-radius:50%; animation:blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+
+    .hero h1 {
+      font-family:'DM Serif Display',serif;
+      font-size:clamp(48px,6.5vw,90px);
+      font-weight:400; line-height:1.03; letter-spacing:-.03em; margin-bottom:20px;
+    }
+    .hero h1 em { font-style:italic; color:var(--orange); }
+    .hero-sub {
+      font-size:clamp(15px,1.6vw,18px); color:var(--muted);
+      font-weight:300; margin-bottom:32px; max-width:460px; line-height:1.6;
+    }
+    .hero-actions { display:flex; gap:10px; flex-wrap:wrap; }
+    .btn-hero { padding:13px 24px; font-size:14px; border-radius:8px; }
+
+    /* ── STRIP ── */
+    .strip {
+      background:var(--orange); padding:18px 64px;
+      display:flex; gap:0; overflow-x:auto; justify-content:center;
+    }
+    @media(max-width:768px){ .strip{ padding:18px 24px; } }
+    .strip-item {
+      flex-shrink:0; padding:0 44px;
+      border-right:1px solid rgba(255,255,255,.22);
+      text-align:center;
+    }
+    .strip-item:first-child { padding-left:0; }
+    .strip-item:last-child { border-right:none; }
+    .strip-num { font-family:'DM Serif Display',serif; font-size:30px; color:#fff; line-height:1; margin-bottom:3px; }
+    .strip-label { font-size:10px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:rgba(255,255,255,.72); }
+
+    /* ── SECTIONS ── */
+    section { padding:88px 0; }
+
+    /* ── 01 PROGRAMA (right: image left, text right) ── */
+    #programa { background:var(--bg); }
+    .two-col {
+      display:grid; grid-template-columns:1fr 1fr;
+      gap:72px; align-items:center;
+    }
+    @media(max-width:860px){ .two-col{ grid-template-columns:1fr; gap:40px; } }
+    .col-img { border-radius:10px; overflow:hidden; aspect-ratio:4/3; }
+    .col-img img { width:100%; height:100%; object-fit:cover; transition:transform .5s; }
+    .col-img:hover img { transform:scale(1.03); }
+
+    /* text block right-aligned (label+title right, lead right) */
+    .text-right { text-align:right; }
+    .text-right .label { flex-direction:row-reverse; }
+    .text-right .label::before { display:none; }
+    .text-right .label::after { content:''; width:18px; height:1px; background:var(--orange); }
+    .text-right p.lead { margin-left:auto; }
+
+    /* text block left-aligned */
+    .text-left { text-align:left; }
+
+    /* ── 02 PARA QUIÉN (left: text left, visual right) ── */
+    #para-quien { background:var(--bg2); }
+    .areas { display:flex; flex-wrap:wrap; gap:7px; margin-top:20px; }
+    .area-chip {
+      font-size:12px; font-weight:500; padding:5px 13px;
+      border-radius:100px; border:1px solid var(--border);
+      color:var(--muted); transition:all .2s;
+    }
+    .area-chip:hover { border-color:var(--orange); color:var(--orange); }
+
+    .info-card {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:10px; overflow:hidden;
+    }
+    .info-card-img { width:100%; aspect-ratio:16/9; object-fit:cover; display:block; }
+    .info-card-body { padding:18px 20px; }
+    .info-card-body h4 { font-size:13px; font-weight:600; margin-bottom:5px; }
+    .info-card-body p { font-size:13px; color:var(--muted); line-height:1.6; }
+
+    /* ── 03 PRINCIPIOS (center, 3-col) ── */
+    #principios { background:var(--bg); text-align:center; }
+    #principios .label { justify-content:center; }
+    #principios .label::before { display:none; }
+    #principios .title { margin:0 auto 48px; }
+
+    .principios-grid {
+      display:grid; grid-template-columns:repeat(3,1fr);
+      gap:1px; background:var(--border);
+      border:1px solid var(--border); border-radius:12px; overflow:hidden;
+    }
+    @media(max-width:860px){ .principios-grid{ grid-template-columns:1fr; } }
+    .principio-card {
+      background:var(--bg); padding:36px 28px; text-align:center;
+      transition:background .3s;
+    }
+    .principio-card:hover { background:var(--bg3); }
+    .principio-n {
+      font-family:'DM Serif Display',serif; font-size:44px;
+      color:var(--orange-dim); line-height:1; margin-bottom:14px;
+    }
+    .principio-card h3 { font-size:14px; font-weight:600; margin-bottom:7px; }
+    .principio-card p { font-size:13px; color:var(--muted); line-height:1.7; }
+
+    /* ── FOTO STRIP ── */
+    .foto-grid {
+      display:grid;
+      grid-template-columns:2fr 1fr 1fr;
+      grid-template-rows:210px 210px;
+      gap:5px;
+    }
+    @media(max-width:768px){ .foto-grid{ grid-template-columns:1fr 1fr; grid-template-rows:160px 160px; } }
+    .foto-item { overflow:hidden; }
+    .foto-item img { width:100%; height:100%; object-fit:cover; transition:transform .5s; display:block; }
+    .foto-item:hover img { transform:scale(1.04); }
+    .foto-item.span-r { grid-column:1; grid-row:1/3; }
+    @media(max-width:768px){ .foto-item.span-r{ grid-column:auto; grid-row:auto; } }
+
+    /* ── 04 BENEFICIOS (right-aligned header, grid center) ── */
+    #beneficios { background:var(--bg2); }
+    .benefits-header {
+      display:flex; justify-content:flex-end; margin-bottom:48px;
+    }
+    .benefits-header-inner { text-align:right; max-width:420px; }
+    .benefits-header-inner .label { flex-direction:row-reverse; }
+    .benefits-header-inner .label::before { display:none; }
+    .benefits-header-inner .label::after { content:''; width:18px; height:1px; background:var(--orange); }
+
+    .benefits-grid {
+      display:grid; grid-template-columns:repeat(3,1fr);
+      gap:1px; background:var(--border);
+      border:1px solid var(--border); border-radius:12px; overflow:hidden;
+    }
+    @media(max-width:860px){ .benefits-grid{ grid-template-columns:1fr; } }
+    .benefit-card {
+      background:var(--bg2); padding:28px;
+      transition:background .25s;
+    }
+    .benefit-card:hover { background:var(--bg3); }
+    .benefit-icon { width:32px; height:32px; color:var(--orange); margin-bottom:14px; }
+    .benefit-icon svg { width:100%; height:100%; }
+    .benefit-card h3 { font-size:14px; font-weight:600; margin-bottom:6px; }
+    .benefit-card p { font-size:13px; color:var(--muted); line-height:1.65; }
+
+    .pi-row-simple {
+      margin-top:32px; padding:20px 24px;
+      border:1px solid var(--orange-border); border-radius:10px;
+      background:var(--orange-dim);
+      display:flex; gap:12px; align-items:center; flex-wrap:wrap;
+    }
+    .pi-row-simple svg { width:18px; height:18px; color:var(--orange); flex-shrink:0; }
+    .pi-row-simple p { font-size:13px; color:var(--muted); line-height:1.65; flex:1; min-width:200px; }
+    .pi-row-simple strong { color:var(--text); }
+
+    /* ── 05 PROCESO (center, 3-col) ── */
+    #proceso { background:var(--bg); text-align:center; }
+    #proceso .label { justify-content:center; }
+    #proceso .label::before { display:none; }
+    #proceso .title { margin:0 auto 52px; }
+
+    .proceso-steps {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:0;
+      position:relative;
+    }
+    @media(max-width:860px){ .proceso-steps{ grid-template-columns:1fr; } }
+    .proceso-steps::before {
+      content:''; position:absolute; top:35px;
+      left:calc(16.66% + 16px); right:calc(16.66% + 16px);
+      height:1px; background:var(--border);
+    }
+    @media(max-width:860px){ .proceso-steps::before{ display:none; } }
+    .step { padding:0 36px 36px; text-align:center; }
+    .step-circle {
+      width:70px; height:70px; border:1px solid var(--orange); border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      margin:0 auto 22px; background:var(--bg); position:relative; z-index:1;
+    }
+    .step-circle svg { width:24px; height:24px; color:var(--orange); }
+    .step h3 { font-size:14px; font-weight:600; margin-bottom:7px; }
+    .step p { font-size:13px; color:var(--muted); line-height:1.7; }
+
+    .proceso-note {
+      margin-top:40px; padding:20px 24px;
+      border:1px solid var(--border); border-radius:10px;
+      display:inline-flex; gap:14px; align-items:flex-start;
+      text-align:left; max-width:680px;
+    }
+    .proceso-note svg { width:18px; height:18px; color:var(--orange); flex-shrink:0; margin-top:2px; }
+    .proceso-note p { font-size:13px; color:var(--muted); line-height:1.65; }
+    .proceso-note strong { color:var(--text); }
+
+    /* ── QUOTE (center) ── */
+    .quote-section {
+      padding:80px 0; border-top:1px solid var(--border);
+      border-bottom:1px solid var(--border); background:var(--bg2);
+    }
+    .quote-inner { max-width:640px; margin:0 auto; padding:0 64px; text-align:center; }
+    @media(max-width:768px){ .quote-inner{ padding:0 24px; } }
+    .quote-mark { font-family:'DM Serif Display',serif; font-size:56px; color:var(--orange); line-height:.8; margin-bottom:14px; }
+    .quote-text { font-family:'DM Serif Display',serif; font-size:clamp(19px,2.4vw,26px); font-style:italic; line-height:1.45; margin-bottom:18px; }
+    .quote-source { font-size:11px; color:var(--muted); letter-spacing:.09em; text-transform:uppercase; }
+
+    /* ── CTA (center) ── */
+    #contacto { background:var(--bg); padding:112px 0; text-align:center; }
+    .contacto-inner { max-width:560px; margin:0 auto; padding:0 64px; }
+    @media(max-width:768px){ .contacto-inner{ padding:0 24px; } }
+    .contacto-inner .label { justify-content:center; }
+    .contacto-inner .label::before { display:none; }
+    .cta-box {
+      border:1px solid var(--border); border-radius:16px;
+      padding:44px; margin-top:44px; background:var(--surface);
+    }
+    @media(max-width:768px){ .cta-box{ padding:28px 20px; } }
+    .cta-logo { height:132px; width:132px; object-fit:contain; margin:0 auto 24px; display:block; }
+    .cta-email {
+      font-family:'DM Serif Display',serif; font-size:clamp(19px,2.8vw,30px);
+      display:block; margin-bottom:5px; transition:color .2s;
+    }
+    .cta-email:hover { color:var(--orange); }
+    .cta-web { font-size:12px; color:var(--muted); display:block; margin-bottom:32px; letter-spacing:.04em; transition:color .2s; }
+    .cta-web:hover { color:var(--text); }
+    .cta-actions { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+
+    .btn-cta-primary {
+      display:inline-flex; align-items:center; gap:9px;
+      background:var(--orange); color:#fff;
+      padding:14px 26px; border-radius:8px;
+      font-size:14px; font-weight:600; font-family:'Inter',sans-serif;
+      cursor:pointer; border:none; transition:all .25s; letter-spacing:.02em;
+    }
+    .btn-cta-primary:hover { filter:brightness(1.1); transform:translateY(-2px); box-shadow:0 10px 32px rgba(232,69,30,.28); }
+    .btn-cta-primary svg { width:16px; height:16px; }
+
+    .btn-cta-ghost {
+      display:inline-flex; align-items:center; gap:9px;
+      background:transparent; color:var(--text);
+      padding:14px 26px; border-radius:8px;
+      font-size:14px; font-weight:500; font-family:'Inter',sans-serif;
+      cursor:pointer; border:1px solid var(--border); transition:all .25s;
+    }
+    .btn-cta-ghost:hover { border-color:var(--orange); color:var(--orange); }
+    .btn-cta-ghost svg { width:16px; height:16px; }
+
+    .cta-locs {
+      margin-top:28px; display:flex; justify-content:center;
+      gap:24px; flex-wrap:wrap;
+    }
+    .cta-loc { display:flex; align-items:center; gap:6px; font-size:11px; color:var(--muted); letter-spacing:.04em; }
+    .cta-loc svg { width:13px; height:13px; color:var(--orange); }
+
+    /* ── FOOTER ── */
+    footer {
+      height:52px; border-top:1px solid var(--border);
+      display:flex; align-items:center; background:var(--bg);
+    }
+    .footer-inner {
+      width:100%; max-width:1120px; margin:0 auto; padding:0 64px;
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    @media(max-width:768px){ .footer-inner{ padding:0 24px; } }
+    .footer-logo { display:flex; align-items:center; gap:9px; }
+    .footer-logo img { height:24px; width:24px; object-fit:contain; }
+    .footer-logo span { font-size:11px; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); }
+    footer p { font-size:11px; color:var(--muted); opacity:.45; }
+
+    /* ── ANIMATIONS ── */
+    .fade-up { opacity:0; transform:translateY(20px); transition:opacity .7s ease, transform .7s ease; }
+    .fade-up.visible { opacity:1; transform:translateY(0); }
+    .d1 { transition-delay:.1s; }
+    .d2 { transition-delay:.2s; }
+    .d3 { transition-delay:.3s; }
+  </style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="#">
+      <img src="logo-crtic.png" alt="CRTIC" />
+      <span class="nav-logo-text">Residencia I+D+i</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#programa">Programa</a></li>
+      <li><a href="#para-quien">Requisitos</a></li>
+      <li><a href="#beneficios">Beneficios</a></li>
+      <li><a href="#proceso">Proceso</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="programa-residencia-idi.docx" download class="btn btn-ghost">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Programa completo
+      </a>
+      <a href="#contacto" class="btn btn-primary">Postular</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══ HERO (left) ═══ -->
+<div class="hero">
+  <div class="hero-img"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      Convocatoria permanente · 2026–2027
+    </div>
+    <h1>Residencia<br>de <em>I+D+i</em><br>Tecnocreativa</h1>
+    <p class="hero-sub">Arte, tecnología e investigación para generar conocimiento nuevo —y propiedad intelectual compartida.</p>
+    <div class="hero-actions">
+      <a href="#contacto" class="btn btn-primary btn-hero">Postular ahora</a>
+      <a href="#programa" class="btn btn-ghost btn-hero">Ver el programa</a>
+    </div>
+  </div>
+</div>
+
+<!-- STRIP -->
+<div class="strip">
+  <div class="strip-item">
+    <div class="strip-num">6–18</div>
+    <div class="strip-label">Meses</div>
+  </div>
+  <div class="strip-item">
+    <div class="strip-num">2</div>
+    <div class="strip-label">Laboratorios</div>
+  </div>
+  <div class="strip-item">
+    <div class="strip-num">50%</div>
+    <div class="strip-label">Co-titularidad</div>
+  </div>
+  <div class="strip-item">
+    <div class="strip-num">∞</div>
+    <div class="strip-label">Postulación continua</div>
+  </div>
+</div>
+
+<!-- ═══ 01 PROGRAMA (image left / text right) ═══ -->
+<section id="programa">
+  <div class="inner">
+    <div class="two-col">
+      <div class="col-img fade-up">
+        <img src="fotos/DSC03330.JPG" alt="Laboratorio CRTIC" />
+      </div>
+      <div class="text-right fade-up d1">
+        <div class="label">01 · El programa</div>
+        <h2 class="title">Investigación<br>colaborativa con<br><em>impacto real</em></h2>
+        <p class="lead">Startups tecnocreativas seleccionadas trabajan junto al equipo de CRTIC para explorar un problema abierto. El resultado es una obra conjunta, validada ante público real, con propiedad intelectual compartida.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- ═══ 02 PARA QUIÉN (text left / image right) ═══ -->
+<section id="para-quien">
+  <div class="inner">
+    <div class="two-col">
+      <div class="text-left fade-up">
+        <div class="label">02 · A quién va dirigida</div>
+        <h2 class="title">Startups con una<br>pregunta sin<br><em>respuesta aún</em></h2>
+        <p class="lead" style="max-width:100%;">Con personalidad jurídica, al menos un año de vida y capacidad de comprometer tiempo y recursos propios. Buscamos quien llegue con incertidumbre genuina, no con una solución lista para validar.</p>
+        <div class="areas" style="max-width:420px;">
+          <span class="area-chip">IA creativa</span>
+          <span class="area-chip">Inmersivo</span>
+          <span class="area-chip">Biofeedback</span>
+          <span class="area-chip">Audiovisual interactivo</span>
+          <span class="area-chip">Patrimonio digital</span>
+          <span class="area-chip">Robótica expresiva</span>
+          <span class="area-chip">Diseño especulativo</span>
+        </div>
+      </div>
+      <div class="fade-up d1" style="display:flex;flex-direction:column;gap:14px;">
+        <div class="info-card">
+          <img class="info-card-img" src="fotos/crtic24186.jpg" alt="Experiencia CRTIC" />
+          <div class="info-card-body">
+            <h4>Co-investigadores, no clientes</h4>
+            <p>Ambas partes asumen riesgo, aportan recursos y comparten los hallazgos.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- ═══ ART THINKING — QUÉ ES (left) ═══ -->
+<section id="art-thinking" style="background:var(--orange);">
+  <div class="inner">
+    <div class="two-col" style="align-items:center;">
+      <div class="text-left fade-up">
+        <div class="label" style="color:#fff;--orange:#fff;">Art Thinking</div>
+        <h2 class="title" style="color:#fff;">¿Qué es el<br><em style="color:rgba(255,255,255,.75);">Art Thinking?</em></h2>
+        <p class="lead" style="max-width:100%;margin-bottom:32px;color:rgba(255,255,255,.8);">Un marco metodológico que usa las prácticas artísticas —observación radical, metáfora, ambigüedad productiva— como instrumentos de pensamiento para reformular problemas antes de intentar resolverlos.</p>
+        <a href="https://estebanruiztagle-crtic.github.io/art-thinking-crtic/" target="_blank" class="btn" style="padding:13px 24px;font-size:14px;border-radius:8px;background:#fff;color:#E8451E;font-weight:700;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;">
+            <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+          </svg>
+          Explorar el Art Thinking
+        </a>
+      </div>
+      <div class="fade-up d1">
+        <div style="border:1px solid rgba(255,255,255,.25);border-radius:12px;overflow:hidden;aspect-ratio:4/3;">
+          <img src="fotos/IMG_0426.jpg" alt="Art Thinking CRTIC" style="width:100%;height:100%;object-fit:cover;display:block;" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- ═══ 03 PRINCIPIOS (center, 3-col) ═══ -->
+<section id="principios">
+  <div class="inner">
+    <div class="fade-up">
+      <div class="label">03 · La obra</div>
+      <h2 class="title">El horizonte <em>compartido</em></h2>
+    </div>
+    <div class="principios-grid fade-up d1">
+      <div class="principio-card">
+        <div class="principio-n">01</div>
+        <h3>La obra como medio</h3>
+        <p>A través de ella emergen las tecnologías y el conocimiento susceptibles de protección intelectual.</p>
+      </div>
+      <div class="principio-card">
+        <div class="principio-n">02</div>
+        <h3>El fracaso productivo</h3>
+        <p>Una pregunta transformadora tiene más valor que cumplir métricas sin generar conocimiento nuevo.</p>
+      </div>
+      <div class="principio-card">
+        <div class="principio-n">03</div>
+        <h3>Validación pública</h3>
+        <p>La exhibición ante audiencias reales genera retroalimentación que ningún análisis interno puede sustituir.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOTO GRID -->
+<div class="foto-grid">
+  <div class="foto-item span-r"><img src="fotos/DSC00266.JPG" alt="Instalación" /></div>
+  <div class="foto-item"><img src="fotos/DSC00322.JPG" alt="Tecnología" /></div>
+  <div class="foto-item"><img src="fotos/crticfestviernes9-16.jpg" alt="Fest" /></div>
+  <div class="foto-item"><img src="fotos/crticjueves8-83.jpg" alt="Audiencia" /></div>
+  <div class="foto-item"><img src="fotos/IMG_0406.jpg" alt="Espacio" /></div>
+</div>
+
+<div class="rule"></div>
+
+<!-- ═══ 04 BENEFICIOS (header right, grid full) ═══ -->
+<section id="beneficios">
+  <div class="inner">
+    <div class="benefits-header fade-up">
+      <div class="benefits-header-inner">
+        <div class="label">04 · Lo que obtienes</div>
+        <h2 class="title">Infraestructura,<br>red y <em>PI propia</em></h2>
+      </div>
+    </div>
+    <div class="benefits-grid fade-up d1">
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/>
+          </svg>
+        </div>
+        <h3>Laboratorios SCL + Pucón</h3>
+        <p>Infraestructura técnica, equipamiento especializado y espacios para prototipado.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
+          </svg>
+        </div>
+        <h3>Membresía + red global</h3>
+        <p>Integración formal al equipo y acceso a investigadores, artistas e instituciones de la red CRTIC.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+          </svg>
+        </div>
+        <h3>Propiedad intelectual</h3>
+        <p>Tecnología propia: tuya. Co-creada: co-titulada. La obra: 50/50. CRTIC gestiona el registro INAPI.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/>
+          </svg>
+        </div>
+        <h3>Proyectos con clientes</h3>
+        <p>Participación remunerada en proyectos con empresas de minería, salud, retail y cultura.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+          </svg>
+        </div>
+        <h3>Exhibición pública</h3>
+        <p>La obra se presenta ante audiencias reales. Difusión y co-autoría en publicaciones del centro.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/>
+          </svg>
+        </div>
+        <h3>Patrocinio institucional</h3>
+        <p>Respaldo CRTIC para proyectos propios alineados con la misión tecnocreativa del centro.</p>
+      </div>
+    </div>
+    <div class="pi-row-simple fade-up d2">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <p>El detalle completo de beneficios, condiciones contractuales y distribución de PI está en el <a href="programa-residencia-idi.docx" download style="color:var(--orange);text-decoration:underline;text-underline-offset:3px;">programa oficial descargable</a>.</p>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- ═══ 05 PROCESO (center, 3-col) ═══ -->
+<section id="proceso">
+  <div class="inner">
+    <div class="fade-up">
+      <div class="label">05 · Cómo postular</div>
+      <h2 class="title">Tres <em>pasos</em></h2>
+    </div>
+    <div class="proceso-steps fade-up d1">
+      <div class="step">
+        <div class="step-circle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/>
+          </svg>
+        </div>
+        <h3>Carta de intención</h3>
+        <p>1–2 páginas: tu startup, tu tecnología y la pregunta que todavía no puedes responder solo.</p>
+      </div>
+      <div class="step">
+        <div class="step-circle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+          </svg>
+        </div>
+        <h3>Conversación diagnóstica</h3>
+        <p>45 minutos con el equipo de Innovación. Evaluamos compatibilidad metodológica, no métricas.</p>
+      </div>
+      <div class="step">
+        <div class="step-circle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 012 2v7"/><line x1="6" y1="9" x2="6" y2="21"/>
+          </svg>
+        </div>
+        <h3>Diseño conjunto</h3>
+        <p>Co-diseñamos alcance, duración y distribución de PI antes de suscribir el convenio.</p>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:center;" class="fade-up d2">
+      <div class="proceso-note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        <p><strong>Convocatoria permanente.</strong> Sin fechas límite. Evaluamos postulaciones de forma continua.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ QUOTE (center) ═══ -->
+<div class="quote-section">
+  <div class="quote-inner">
+    <div class="quote-mark">"</div>
+    <div class="quote-text">El CRTIC no vende servicios: construye alianzas donde ambas partes asumen riesgo, aportan recursos y comparten los hallazgos.</div>
+    <a href="https://estebanruiztagle-crtic.github.io/decalogo-art-thinking-crtic/" target="_blank" class="quote-source" style="text-decoration:none;border-bottom:1px solid rgba(240,237,232,.2);padding-bottom:2px;transition:color .2s,border-color .2s;" onmouseover="this.style.color='var(--orange)';this.style.borderColor='var(--orange)'" onmouseout="this.style.color='';this.style.borderColor='rgba(240,237,232,.2)'">Decálogo Art Thinking · CRTIC</a>
+  </div>
+</div>
+
+<!-- ═══ CTA (center) ═══ -->
+<section id="contacto">
+  <div class="contacto-inner">
+    <div class="label">06 · Contacto</div>
+
+    <div class="cta-box fade-up">
+      <img class="cta-logo" src="logo-crtic.png" alt="CRTIC" />
+      <a href="mailto:innovacion@crtic.cl" class="cta-email">innovacion@crtic.cl</a>
+      <a href="https://www.crtic.cl" target="_blank" class="cta-web">www.crtic.cl</a>
+      <div class="cta-actions">
+        <a href="mailto:innovacion@crtic.cl?subject=Postulación%20Residencia%20I%2BD%2Bi%20CRTIC&body=Hola%20equipo%20CRTIC%2C%0A%0AMe%20interesa%20postular%20a%20la%20Residencia%20de%20I%2BD%2Bi.%0A%0ANombre%20de%20startup%3A%20%0ADescripción%3A%20%0APregunta%20de%20investigación%3A%20%0A"
+           class="btn-cta-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.12 1.18 2 2 0 012.1 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.36 6.36l1.27-.85a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+          </svg>
+          Postular ahora
+        </a>
+        <a href="programa-residencia-idi.docx" download class="btn-cta-ghost">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Descargar programa completo
+        </a>
+      </div>
+      <div class="cta-locs">
+        <span class="cta-loc">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Santiago
+        </span>
+        <span class="cta-loc">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Pucón
+        </span>
+        <span class="cta-loc">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+          Chile
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <img src="logo-crtic.png" alt="CRTIC" />
+      <span>Centro de Revolución Tecnológica en Industrias Creativas</span>
+    </div>
+    <p>Dirección de Innovación · 2026</p>
+  </div>
+</footer>
+
+<script>
+  // Scroll animations
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+
+  // Smooth nav scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const t = document.querySelector(a.getAttribute('href'));
+      if(t){ e.preventDefault(); window.scrollTo({ top: t.getBoundingClientRect().top + scrollY - 66, behavior:'smooth' }); }
+    });
+  });
+</script>
+</body>
+</html>

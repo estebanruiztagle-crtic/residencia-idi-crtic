@@ -1,0 +1,14 @@
+.DS_Store
+Thumbs.db
+*.log
+
+# Fotos no usadas en el sitio
+fotos/
+!fotos/DSC00266.JPG
+!fotos/DSC00322.JPG
+!fotos/DSC03330.JPG
+!fotos/IMG_0406.jpg
+!fotos/IMG_0426.jpg
+!fotos/crtic24186.jpg
+!fotos/crticfestviernes9-16.jpg
+!fotos/crticjueves8-83.jpg
