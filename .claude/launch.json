@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "React Dev Server (Vite)",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--prefix", "residencia-react"],
+      "port": 5173
+    },
+    {
+      "name": "React Preview (build)",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "preview", "--prefix", "residencia-react"],
+      "port": 4173
+    }
+  ]
+}
